@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .phone-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            padding: 25px 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            min-height: 90vh;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0 20px 0;
+            color: #1a2a6c;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 24px;
+            color: #4a54e1;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #1a2a6c, #4a54e1);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .balance-label {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .total-balance {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 42px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-card-info {
+            flex: 1;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .btn-card-info:active {
+            transform: translateY(2px);
+        }
+
+        .btn-add-card {
+            flex: 1;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .btn-add-card:active {
+            transform: translateY(2px);
+        }
+
+        .btn-send-payment {
+            width: 100%;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: 600;
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .btn-send-payment:active {
+            transform: translateY(2px);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .see-all {
+            color: #4a54e1;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .expenses-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .expense-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .expense-card:active {
+            transform: scale(0.95);
+        }
+
+        .expense-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 24px;
+        }
+
+        .icon-apple {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
+        }
+
+        .icon-gas {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+        }
+
+        .icon-shipping {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            color: white;
+        }
+
+        .expense-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 3px;
+        }
+
+        .expense-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .transaction-card {
+            background: white;
+            border-radius: 20px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        .transaction-card:active {
+            transform: scale(0.98);
+        }
+
+        .transaction-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .transaction-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4a54e1 0%, #1a2a6c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .transaction-info h6 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .transaction-info small {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .transaction-amount {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .decorative-shapes {
+            position: relative;
+            height: 120px;
+            margin-bottom: 20px;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.3;
+        }
+
+        .shape-1 {
+            top: 10px;
+            left: 20px;
+            font-size: 50px;
+            color: #ff6b6b;
+        }
+
+        .shape-2 {
+            top: 40px;
+            right: 30px;
+            font-size: 40px;
+            color: #ffd700;
+        }
+
+        .shape-3 {
+            bottom: 10px;
+            left: 50px;
+            font-size: 45px;
+            color: #4ecdc4;
+        }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .welcome-text h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            color: rgba(255,255,255,0.8);
+            font-size: 15px;
+        }
+
+        .btn-start {
+            width: 100%;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: 600;
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .btn-start:active {
+            transform: translateY(2px);
+        }
+
+        /* Footer Menu */
+        .footer-menu {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 360px;
+            background: white;
+            border-radius: 25px;
+            padding: 15px 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: #999;
+        }
+
+        .menu-item i {
+            font-size: 22px;
+            transition: all 0.3s;
+        }
+
+        .menu-item span {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .menu-item.active {
+            background: linear-gradient(135deg, #4a54e1 0%, #1a2a6c 100%);
+            color: white;
+        }
+
+        .menu-item:active {
+            transform: translateY(-3px);
+        }
+
+        /* QR Code Section */
+        .qr-section {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .qr-info {
+            margin-top: 15px;
+        }
+
+        .qr-info h5 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+        }
+
+        .qr-info p {
+            color: #999;
+            font-size: 13px;
+        }
+
+        /* Statistics Section */
+        .stats-card {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 200px;
+            margin: 20px 0;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 150px;
+            gap: 8px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, #4a54e1, #1a2a6c);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.3s;
+            min-width: 20px;
+        }
+
+        .bar:active {
+            opacity: 0.8;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #999;
+            white-space: nowrap;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .stat-box.income {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+
+        .stat-box.expense {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 20px;
+        }
+
+        .stat-icon.income {
+            background: #10b981;
+            color: white;
+        }
+
+        .stat-icon.expense {
+            background: #ef4444;
+            color: white;
+        }
+
+        .stat-amount {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 3px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .page-content {
+            padding-bottom: 90px;
+        }
+
+        /* Donut Chart */
+        .donut-chart {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .donut-chart svg {
+            transform: rotate(-90deg);
+        }
+
+        .donut-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .donut-total {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .donut-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .keypad-btn {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .keypad-btn:active {
+            transform: scale(0.95);
+            background: #f3f4f6;
+        }
+
+        .back-button {
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .back-button:active {
+            transform: scale(0.95);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .form-control:focus {
+            border-color: #4a54e1;
+            box-shadow: 0 0 0 2px rgba(74, 84, 225, 0.2);
+            outline: none;
+        }
+
+        .text-danger {
+            color: #ef4444 !important;
+        }
+
+        .text-success {
+            color: #10b981 !important;
+        }
+
+        .txt{
+            font-size: 1.5rem;
+        }
+        .image{
+            max-width: 720px;
+            max-height: 100px
+        }
+        
+        /* PIN Page Styles */
+        .pin-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 70vh;
+            text-align: center;
+        }
+        
+        .pin-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a2a6c;
+            margin-bottom: 10px;
+        }
+        
+        .pin-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .pin-display {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .pin-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #e5e7eb;
+            transition: all 0.3s;
+        }
+        
+        .pin-dot.active {
+            background-color: #4a54e1;
+        }
+        
+        .pin-keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .pin-btn {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .pin-btn:active {
+            transform: scale(0.95);
+            background: #f3f4f6;
+        }
+        
+        .pin-btn.delete {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+        
+        .pin-btn.delete:active {
+            background: #fee2e2;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .pin-success {
+            color: #10b981;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        /* Contact Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        
+        .modal-container {
+            background: white;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .modal-close:active {
+            background: #f3f4f6;
+        }
+        
+        .modal-body {
+            padding: 0;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .contact-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .contact-item:active {
+            background: #f9fafb;
+        }
+        
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+        
+        .contact-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4a54e1 0%, #1a2a6c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .contact-info {
+            flex: 1;
+        }
+        
+        .contact-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 3px;
+        }
+        
+        .contact-phone {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .input-group .form-control {
+            margin-bottom: 0;
+            flex: 1;
+        }
+        
+        .btn-contacts {
+            background: #4a54e1;
+            border: none;
+            color: white;
+            width: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-contacts:active {
+            transform: scale(0.95);
+            background: #1a2a6c;
+        }
+        
+        .search-container {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .search-input:focus {
+            border-color: #4a54e1;
+            box-shadow: 0 0 0 2px rgba(74, 84, 225, 0.2);
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="page-content">
+        <!-- Page de code PIN -->
+        <div id="pinPage">
+            <div class="pin-container">
+                <div class="logo" style="margin-bottom: 30px;">
+                    <i class="fas fa-money-bill-transfer"></i>
+                    <span>Nalemp MoneyTransfer</span>
+                </div>
+                
+                <div class="pin-title">Entrez votre code PIN</div>
+                <div class="pin-subtitle">Pour accéder à votre compte</div>
+                
+                <div class="pin-display">
+                    <div class="pin-dot" id="pinDot1"></div>
+                    <div class="pin-dot" id="pinDot2"></div>
+                    <div class="pin-dot" id="pinDot3"></div>
+                    <div class="pin-dot" id="pinDot4"></div>
+                </div>
+                
+                <div class="pin-keypad">
+                    <button class="pin-btn" data-value="1">1</button>
+                    <button class="pin-btn" data-value="2">2</button>
+                    <button class="pin-btn" data-value="3">3</button>
+                    <button class="pin-btn" data-value="4">4</button>
+                    <button class="pin-btn" data-value="5">5</button>
+                    <button class="pin-btn" data-value="6">6</button>
+                    <button class="pin-btn" data-value="7">7</button>
+                    <button class="pin-btn" data-value="8">8</button>
+                    <button class="pin-btn" data-value="9">9</button>
+                    <button class="pin-btn" style="visibility: hidden;"></button>
+                    <button class="pin-btn" data-value="0">0</button>
+                    <button class="pin-btn delete" id="pinDelete">
+                        <i class="fas fa-backspace"></i>
+                    </button>
+                </div>
+                
+                <div class="error-message" id="pinError">
+                    Code PIN incorrect. Veuillez réessayer.
+                </div>
+                
+                <div class="pin-success" id="pinSuccess">
+                    Code PIN correct! Accès autorisé.
+                </div>
+            </div>
+        </div>
+
+        <!-- Page d'accueil -->
+        <div id="homePage" style="display: none;">
+            <div class="decorative-shapes">
+                <div class="shape shape-1">🌺</div>
+                <div class="shape shape-2">🦋</div>
+                <div class="shape shape-3">🌈</div>
+            </div>
+
+            <div class="welcome-text">
+                <h1>Get The Best<br>Finances App</h1>
+                <p>Simplify Cash Management<br>and achieve your dreams</p>
+            </div>
+
+            <button class="btn-start" onclick="">
+                <i class="fas fa-arrow-right"></i>
+                Go to Dashboard
+            </button>
+        </div>
+
+        <!-- QR Code Page -->
+        <div id="qrCodePage" style="display: none;">
+            <div class="section-header" style="margin-bottom: 25px;">
+                <div class="section-title">Mon QR Code</div>
+            </div>
+
+            <div class="qr-section">
+                <h5 style="margin-bottom: 15px;">Scannez pour payer</h5>
+                <div class="qr-code">
+                    <svg width="100%" height="100%" viewBox="0 0 29 29">
+                        <rect width="29" height="29" fill="white"/>
+                        <g fill="black">
+                            <rect x="0" y="0" width="7" height="7"/>
+                            <rect x="2" y="2" width="3" height="3" fill="white"/>
+                            <rect x="22" y="0" width="7" height="7"/>
+                            <rect x="24" y="2" width="3" height="3" fill="white"/>
+                            <rect x="0" y="22" width="7" height="7"/>
+                            <rect x="2" y="24" width="3" height="3" fill="white"/>
+                            <rect x="9" y="0" width="1" height="1"/>
+                            <rect x="11" y="0" width="1" height="1"/>
+                            <rect x="13" y="0" width="1" height="1"/>
+                            <rect x="15" y="0" width="1" height="1"/>
+                            <rect x="17" y="0" width="1" height="1"/>
+                            <rect x="19" y="0" width="1" height="1"/>
+                            <rect x="9" y="2" width="1" height="1"/>
+                            <rect x="11" y="2" width="1" height="1"/>
+                            <rect x="15" y="2" width="1" height="1"/>
+                            <rect x="19" y="2" width="1" height="1"/>
+                            <rect x="9" y="4" width="1" height="1"/>
+                            <rect x="13" y="4" width="1" height="1"/>
+                            <rect x="15" y="4" width="1" height="1"/>
+                            <rect x="17" y="4" width="1" height="1"/>
+                            <rect x="19" y="4" width="1" height="1"/>
+                            <rect x="9" y="6" width="1" height="1"/>
+                            <rect x="11" y="6" width="1" height="1"/>
+                            <rect x="13" y="6" width="1" height="1"/>
+                            <rect x="15" y="6" width="1" height="1"/>
+                            <rect x="17" y="6" width="1" height="1"/>
+                            <rect x="19" y="6" width="1" height="1"/>
+                            <rect x="0" y="9" width="1" height="1"/>
+                            <rect x="2" y="9" width="1" height="1"/>
+                            <rect x="4" y="9" width="1" height="1"/>
+                            <rect x="6" y="9" width="1" height="1"/>
+                            <rect x="9" y="9" width="1" height="1"/>
+                            <rect x="11" y="9" width="1" height="1"/>
+                            <rect x="15" y="9" width="1" height="1"/>
+                            <rect x="17" y="9" width="1" height="1"/>
+                            <rect x="22" y="9" width="1" height="1"/>
+                            <rect x="24" y="9" width="1" height="1"/>
+                            <rect x="26" y="9" width="1" height="1"/>
+                            <rect x="28" y="9" width="1" height="1"/>
+                            <rect x="10" y="11" width="1" height="1"/>
+                            <rect x="12" y="11" width="1" height="1"/>
+                            <rect x="14" y="11" width="1" height="1"/>
+                            <rect x="16" y="11" width="1" height="1"/>
+                            <rect x="18" y="11" width="1" height="1"/>
+                            <rect x="9" y="13" width="1" height="1"/>
+                            <rect x="13" y="13" width="1" height="1"/>
+                            <rect x="15" y="13" width="1" height="1"/>
+                            <rect x="17" y="13" width="1" height="1"/>
+                            <rect x="19" y="13" width="1" height="1"/>
+                            <rect x="10" y="15" width="1" height="1"/>
+                            <rect x="12" y="15" width="1" height="1"/>
+                            <rect x="14" y="15" width="1" height="1"/>
+                            <rect x="16" y="15" width="1" height="1"/>
+                            <rect x="18" y="15" width="1" height="1"/>
+                            <rect x="11" y="17" width="1" height="1"/>
+                            <rect x="13" y="17" width="1" height="1"/>
+                            <rect x="15" y="17" width="1" height="1"/>
+                            <rect x="17" y="17" width="1" height="1"/>
+                            <rect x="19" y="17" width="1" height="1"/>
+                            <rect x="9" y="19" width="1" height="1"/>
+                            <rect x="13" y="19" width="1" height="1"/>
+                            <rect x="17" y="19" width="1" height="1"/>
+                            <rect x="22" y="19" width="1" height="1"/>
+                            <rect x="24" y="19" width="1" height="1"/>
+                            <rect x="28" y="19" width="1" height="1"/>
+                            <rect x="9" y="22" width="1" height="1"/>
+                            <rect x="11" y="22" width="1" height="1"/>
+                            <rect x="13" y="22" width="1" height="1"/>
+                            <rect x="17" y="22" width="1" height="1"/>
+                            <rect x="19" y="22" width="1" height="1"/>
+                            <rect x="22" y="22" width="1" height="1"/>
+                            <rect x="24" y="22" width="1" height="1"/>
+                            <rect x="26" y="22" width="1" height="1"/>
+                            <rect x="28" y="22" width="1" height="1"/>
+                            <rect x="9" y="24" width="1" height="1"/>
+                            <rect x="13" y="24" width="1" height="1"/>
+                            <rect x="15" y="24" width="1" height="1"/>
+                            <rect x="19" y="24" width="1" height="1"/>
+                            <rect x="22" y="24" width="1" height="1"/>
+                            <rect x="26" y="24" width="1" height="1"/>
+                            <rect x="9" y="26" width="1" height="1"/>
+                            <rect x="11" y="26" width="1" height="1"/>
+                            <rect x="15" y="26" width="1" height="1"/>
+                            <rect x="19" y="26" width="1" height="1"/>
+                            <rect x="22" y="26" width="1" height="1"/>
+                            <rect x="24" y="26" width="1" height="1"/>
+                            <rect x="28" y="26" width="1" height="1"/>
+                            <rect x="9" y="28" width="1" height="1"/>
+                            <rect x="11" y="28" width="1" height="1"/>
+                            <rect x="13" y="28" width="1" height="1"/>
+                            <rect x="15" y="28" width="1" height="1"/>
+                            <rect x="17" y="28" width="1" height="1"/>
+                            <rect x="19" y="28" width="1" height="1"/>
+                            <rect x="24" y="28" width="1" height="1"/>
+                            <rect x="26" y="28" width="1" height="1"/>
+                        </g>
+                    </svg>
+                </div>
+                <div class="qr-info">
+                    <h5 id="user-name-qr"></h5>
+                    <p id="user-id-qr"></p>
+                    <p style="margin-top: 10px; color: #4a54e1; font-weight: 600;">
+                        <i class="fas fa-share-alt"></i> Partager le QR Code
+                    </p>
+                </div>
+            </div>
+
+            <div class="balance-card">
+                <div style="text-align: center;">
+                    <div class="balance-label">Solde disponible</div>
+                    <div class="balance-amount" id="balance-qr"></div>
+                    <button class="btn-send-payment" style="margin-top: 20px;">
+                        <i class="fas fa-qrcode"></i> Scanner un QR Code
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Page -->
+        <div id="statsPage" style="display: none;">
+            <div class="section-header" style="margin-bottom: 25px;">
+                <div class="section-title">Statistiques</div>
+                <select style="border: none; background: white; padding: 8px 15px; border-radius: 12px; font-size: 14px; font-weight: 600; color: #4a54e1;">
+                    <option>Ce mois</option>
+                    <option>Cette semaine</option>
+                    <option>Cette année</option>
+                </select>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="stats-summary">
+                <div class="stat-box income">
+                    <div class="stat-icon income">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="stat-amount">12,920 CFA</div>
+                    <div class="stat-label">Revenus</div>
+                </div>
+                <div class="stat-box expense">
+                    <div class="stat-icon expense">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="stat-amount">8,430 CFA</div>
+                    <div class="stat-label">Dépenses</div>
+                </div>
+            </div>
+
+            <!-- Bar Chart -->
+            <div class="stats-card">
+                <h5 style="margin-bottom: 20px; font-size: 18px;">Dépenses mensuelles</h5>
+                <div class="chart-container">
+                    <div class="chart-bars">
+                        <div class="bar" style="height: 45%;">
+                            <span class="bar-label">Lun</span>
+                        </div>
+                        <div class="bar" style="height: 70%;">
+                            <span class="bar-label">Mar</span>
+                        </div>
+                        <div class="bar" style="height: 55%;">
+                            <span class="bar-label">Mer</span>
+                        </div>
+                        <div class="bar" style="height: 85%;">
+                            <span class="bar-label">Jeu</span>
+                        </div>
+                        <div class="bar" style="height: 100%; background: linear-gradient(to top, #fbbf24, #f59e0b);">
+                            <span class="bar-label">Ven</span>
+                        </div>
+                        <div class="bar" style="height: 60%;">
+                            <span class="bar-label">Sam</span>
+                        </div>
+                        <div class="bar" style="height: 40%;">
+                            <span class="bar-label">Dim</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Donut Chart -->
+            <div class="stats-card">
+                <h5 style="margin-bottom: 20px; font-size: 18px;">Répartition par catégorie</h5>
+                <div class="donut-chart">
+                    <svg width="200" height="200">
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#4a54e1" stroke-width="30" stroke-dasharray="251 503"/>
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#fbbf24" stroke-width="30" stroke-dasharray="126 503" stroke-dashoffset="-251"/>
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#10b981" stroke-width="30" stroke-dasharray="126 503" stroke-dashoffset="-377"/>
+                    </svg>
+                    <div class="donut-center">
+                        <div class="donut-total ">25,950 F</div>
+                        <div class="donut-label">Total</div>
+                    </div>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #4a54e1;"></div>
+                        <span>Shopping 50%</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #fbbf24;"></div>
+                        <span>Transport 25%</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #10b981;"></div>
+                        <span>Food 25%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboardPage" style="display: none;">
+            <div class="header">
+                <div class="logo">
+                    <i class="fas fa-money-bill-transfer"></i>
+                    <span>NalempMoneyTransfer</span>
+                </div>
+            </div>
+
+            <div class="balance-card">
+                <img src="image.jpg" alt="Card Header" style="width: 100%; border-top-left-radius: 25px; border-top-right-radius: 25px;">
+                <div style="padding: 25px;">
+                    <div class="total-balance" id="total-balance"></div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="color: rgba(255,255,255,0.8); font-size: 13px; margin-bottom: 5px;">Welcome <span id="user-name"></span></div>
+                        <div class="balance-amount" id="balance-dashboard">***</div>
+                    </div>
+
+                    <div class="card-actions">
+                        <button class="btn-card-info" id="toggle-balance">voir solde</button>
+                        <button class="btn-add-card">Ajouter Depenses</button>
+                    </div>
+
+                    <button class="btn-send-payment" onclick="showSendMoney()">Envoyer Argent</button>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <div class="section-title">Depenses</div>
+                <a href="#" class="see-all">Voir plus</a>
+            </div>
+
+            <div class="expenses-grid">
+                <div class="expense-card">
+                    <div class="expense-icon icon-apple">
+                        <i class="fab fa-apple"></i>
+                    </div>
+                    <div class="expense-amount">0.00 F</div>
+                    <div class="expense-label">Apple</div>
+                </div>
+
+                <div class="expense-card">
+                    <div class="expense-icon icon-gas">
+                        <i class="fas fa-gas-pump"></i>
+                    </div>
+                    <div class="expense-amount">149,685 F</div>
+                    <div class="expense-label">Card Gas</div>
+                </div>
+
+                <div class="expense-card">
+                    <div class="expense-icon icon-shipping">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <div class="expense-amount">146,569 F</div>
+                    <div class="expense-label">Shipping</div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <div class="section-title">5 Derniers Transactions</div>
+                <a href="#" class="see-all">Voir Plus</a>
+            </div>
+
+            <div id="last-transactions"></div>
+        </div>
+
+        <!-- Page Send Money -->
+        <div id="sendMoneyPage" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                <button onclick="showDashboard()" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 style="flex: 1; text-align: center; margin: 0; font-size: 20px; color: #1a1a1a;">Transfer d'argent</h2>
+                <button class="back-button">
+                    <i class="fas fa-ellipsis-h"></i>
+                </button>
+            </div>
+
+            <div class="balance-card">
+                <div class="input-group">
+                    <input type="number" id="recipient-phone" class="form-control" placeholder="Entrez le numéro de téléphone du destinataire">
+                    <button class="btn-contacts" onclick="showContactsModal()">
+                        <i class="fas fa-users"></i>
+                    </button>
+                </div>
+
+                <div class="balance-amount" style="text-align: center;" id="amount-to-send">0.00 CFA</div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+                    <button class="keypad-btn">1</button>
+                    <button class="keypad-btn">2</button>
+                    <button class="keypad-btn">3</button>
+                    <button class="keypad-btn">4</button>
+                    <button class="keypad-btn">5</button>
+                    <button class="keypad-btn">6</button>
+                    <button class="keypad-btn">7</button>
+                    <button class="keypad-btn">8</button>
+                    <button class="keypad-btn">9</button>
+                    <button class="keypad-btn">.</button>
+                    <button class="keypad-btn">0</button>
+                    <button class="keypad-btn"><i class="fas fa-backspace"></i></button>
+                </div>
+
+                <button class="btn-send-payment" id="transfer-payment">Envoyer l'argent</button>
+            </div>
+        </div>
+        </div>
+
+        <!-- Footer Menu -->
+        <div class="footer-menu">
+            <a class="menu-item" onclick="showDashboard()">
+                <i class="fas fa-home"></i>
+                <span>Acceuil</span>
+            </a>
+            <a class="menu-item" onclick="showStats()">
+                <i class="fas fa-chart-bar"></i>
+                <span>Stats</span>
+            </a>
+            <a class="menu-item" onclick="showQRCode()">
+                <i class="fas fa-qrcode"></i>
+                <span>QR Code</span>
+            </a>
+            <a class="menu-item" onclick="showSendMoney()">
+                <i class="fas fa-paper-plane"></i>
+                <span>Envoi</span>
+            </a>
+            <a class="menu-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal Contacts -->
+    <div id="contactsModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title">Mes Contacts</div>
+                <button class="modal-close" onclick="hideContactsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Rechercher un contact..." id="contactSearch">
+            </div>
+            
+            <div class="modal-body">
+                <ul class="contact-list" id="contactList">
+                    <!-- Les contacts seront ajoutés dynamiquement ici -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+ <script src="../indexedDB.js"></script>
+    <script>
+        // --- CONTACTS DATA --- //
+        
+        // Données de contacts simulées
+        const contacts = [
+            { id: 1, name: "Marie Diop", phone: "771234567", avatar: "MD" },
+            { id: 2, name: "Jean Ndiaye", phone: "772345678", avatar: "JN" },
+            { id: 3, name: "Fatou Sow", phone: "773456789", avatar: "FS" },
+            { id: 4, name: "Paul Fall", phone: "774567890", avatar: "PF" },
+            { id: 5, name: "Aminata Ba", phone: "775678901", avatar: "AB" },
+            { id: 6, name: "Moussa Diallo", phone: "776789012", avatar: "MD" },
+            { id: 7, name: "Adama Kane", phone: "777890123", avatar: "AK" },
+            { id: 8, name: "Khadija Gueye", phone: "778901234", avatar: "KG" }
+        ];
+        
+        // --- CONTACTS MODAL FUNCTIONS --- //
+        
+        /**
+         * Affiche la modale des contacts
+         */
+        function showContactsModal() {
+            document.getElementById('contactsModal').style.display = 'flex';
+            renderContacts();
+        }
+        
+        /**
+         * Masque la modale des contacts
+         */
+        function hideContactsModal() {
+            document.getElementById('contactsModal').style.display = 'none';
+        }
+        
+        /**
+         * Affiche la liste des contacts dans la modale
+         */
+        function renderContacts() {
+            const contactList = document.getElementById('contactList');
+            const searchTerm = document.getElementById('contactSearch').value.toLowerCase();
+            
+            // Filtrer les contacts selon la recherche
+            const filteredContacts = contacts.filter(contact => 
+                contact.name.toLowerCase().includes(searchTerm) || 
+                contact.phone.includes(searchTerm)
+            );
+            
+            // Vider la liste
+            contactList.innerHTML = '';
+            
+            // Ajouter chaque contact à la liste
+            filteredContacts.forEach(contact => {
+                const contactItem = document.createElement('li');
+                contactItem.className = 'contact-item';
+                contactItem.innerHTML = `
+                    <div class="contact-avatar">${contact.avatar}</div>
+                    <div class="contact-info">
+                        <div class="contact-name">${contact.name}</div>
+                        <div class="contact-phone">${contact.phone}</div>
+                    </div>
+                `;
+                
+                // Ajouter un écouteur d'événement pour sélectionner le contact
+                contactItem.addEventListener('click', () => {
+                    selectContact(contact);
+                });
+                
+                contactList.appendChild(contactItem);
+            });
+            
+            // Si aucun contact n'est trouvé
+            if (filteredContacts.length === 0) {
+                const noResults = document.createElement('li');
+                noResults.className = 'contact-item';
+                noResults.innerHTML = `
+                    <div style="text-align: center; width: 100%; padding: 20px; color: #999;">
+                        Aucun contact trouvé
+                    </div>
+                `;
+                contactList.appendChild(noResults);
+            }
+        }
+        
+        /**
+         * Sélectionne un contact et remplit le champ de numéro
+         * @param {Object} contact - Le contact sélectionné
+         */
+        function selectContact(contact) {
+            document.getElementById('recipient-phone').value = contact.phone;
+            hideContactsModal();
+        }
+        
+        // --- PIN CODE LOGIC --- //
+        
+        // Code PIN par défaut (pour la simulation)
+        const CORRECT_PIN = "1234";
+        let enteredPin = "";
+        
+        /**
+         * Initialise la page de code PIN
+         */
+        function initPinPage() {
+            // Ajouter les écouteurs d'événements aux boutons du clavier PIN
+            const pinButtons = document.querySelectorAll('.pin-btn[data-value]');
+            pinButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (enteredPin.length < 4) {
+                        enteredPin += button.getAttribute('data-value');
+                        updatePinDisplay();
+                        
+                        // Si le PIN est complet, vérifier
+                        if (enteredPin.length === 4) {
+                            checkPin();
+                        }
+                    }
+                });
+            });
+            
+            // Écouteur pour le bouton de suppression
+            document.getElementById('pinDelete').addEventListener('click', () => {
+                if (enteredPin.length > 0) {
+                    enteredPin = enteredPin.slice(0, -1);
+                    updatePinDisplay();
+                    hideMessages();
+                }
+            });
+        }
+        
+        /**
+         * Met à jour l'affichage des points du PIN
+         */
+        function updatePinDisplay() {
+            const dots = [
+                document.getElementById('pinDot1'),
+                document.getElementById('pinDot2'),
+                document.getElementById('pinDot3'),
+                document.getElementById('pinDot4')
+            ];
+            
+            dots.forEach((dot, index) => {
+                if (index < enteredPin.length) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        /**
+         * Vérifie si le PIN saisi est correct
+         */
+        function checkPin() {
+            if (enteredPin === CORRECT_PIN) {
+                // PIN correct
+                document.getElementById('pinSuccess').style.display = 'block';
+                document.getElementById('pinError').style.display = 'none';
+                
+                // Rediriger vers le tableau de bord après un court délai
+                setTimeout(() => {
+                   showDashboard();
+                }, 1000);
+            } else {
+                // PIN incorrect
+                document.getElementById('pinError').style.display = 'block';
+                document.getElementById('pinSuccess').style.display = 'none';
+                
+                // Réinitialiser le PIN après un court délai
+                setTimeout(() => {
+                    enteredPin = "";
+                    updatePinDisplay();
+                    hideMessages();
+                }, 1500);
+            }
+        }
+        
+        /**
+         * Masque les messages d'erreur et de succès
+         */
+        function hideMessages() {
+            document.getElementById('pinError').style.display = 'none';
+            document.getElementById('pinSuccess').style.display = 'none';
+        }
+
+        // --- NAVIGATION --- //
+
+        /**
+         * Affiche la page d'accueil
+         */
+      
+
+        /**
+         * Affiche la page du tableau de bord.
+         */
+        function showDashboard() {
+            hideAllPages();
+            document.getElementById('dashboardPage').style.display = 'block';
+            setActiveMenu(0);
+        }
+
+        /**
+         * Affiche la page d'envoi d'argent.
+         */
+        function showSendMoney() {
+            hideAllPages();
+            document.getElementById('sendMoneyPage').style.display = 'block';
+            setActiveMenu(3);
+        }
+
+        /**
+         * Affiche la page des statistiques.
+         */
+        function showStats() {
+            hideAllPages();
+            document.getElementById('statsPage').style.display = 'block';
+            setActiveMenu(1);
+        }
+
+        /**
+         * Affiche la page du code QR.
+         */
+        function showQRCode() {
+            hideAllPages();
+            document.getElementById('qrCodePage').style.display = 'block';
+            setActiveMenu(2);
+        }
+
+        /**
+         * Masque toutes les pages.
+       */
+        function hideAllPages() {
+            document.getElementById('pinPage').style.display = 'none';
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('sendMoneyPage').style.display = 'none';
+            document.getElementById('statsPage').style.display = 'none';
+            document.getElementById('qrCodePage').style.display = 'none';
+        }
+
+        /**
+         * Met en surbrillance l'élément de menu actif.
+         * @param {number} index - L'index de l'élément de menu à activer.
+         */
+        function setActiveMenu(index) {
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach((item, i) => {
+                if (i === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // --- DATA LOADING --- //
+
+        /**
+         * Charge les données du tableau de bord de l'utilisateur à partir d'IndexedDB.
+         */
+          function loadDashboardData() {
+            const userId = parseInt(sessionStorage.getItem('userId'));
+            if (!userId) return;
+
+            const transaction = db.transaction(['users', 'transactions'], 'readonly');
+            const usersStore = transaction.objectStore('users');
+            const transactionsStore = transaction.objectStore('transactions');
+
+            // Récupérer les informations de l'utilisateur
+            const userRequest = usersStore.get(userId);
+            userRequest.onsuccess = () => {
+                const user = userRequest.result;
+                if (user) {
+                    const initials = `${user.prenom.charAt(0)}${user.nom.charAt(0)}`;
+                    document.getElementById('user-name').textContent = `${user.prenom} ${user.nom}`;
+                    document.getElementById('user-name-qr').textContent = `${user.prenom} ${user.nom}`;
+                    document.getElementById('user-id-qr').textContent = `ID: ${user.id}`;
+                    document.getElementById('balance-qr').textContent = `${user.balance} CFA`;
+                    document.getElementById('balance-dashboard').dataset.balance = `Solde: ${user.balance}F`;
+                    document.querySelectorAll('.transaction-avatar').forEach(el => el.textContent = initials);
+                }
+            };
+
+            // Récupérer les transactions
+            const fromIndex = transactionsStore.index('fromUserId');
+            const toIndex = transactionsStore.index('toUserId');
+
+            const fromRequest = fromIndex.getAll(userId);
+            const toRequest = toIndex.getAll(userId);
+
+            let sentTransactions = [];
+            let receivedTransactions = [];
+
+            fromRequest.onsuccess = () => {
+                sentTransactions = fromRequest.result;
+                checkAndRenderTransactions();
+            };
+
+            toRequest.onsuccess = () => {
+                receivedTransactions = toRequest.result;
+                checkAndRenderTransactions();
+            };
+
+            function checkAndRenderTransactions() {
+                if (fromRequest.readyState === 'done' && toRequest.readyState === 'done') {
+                    const allTransactions = [...sentTransactions, ...receivedTransactions];
+                    allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    renderTransactions(allTransactions.slice(0, 5),userId);
+                }
+            }
+        }
+
+        function renderTransactions(transactions, currentUserId) {
+            const lastTransactions = document.getElementById('last-transactions');
+            lastTransactions.innerHTML = '';
+
+            if (transactions.length === 0) {
+                lastTransactions.innerHTML = '<p style="text-align: center; color: #999;">Aucune transaction récente.</p>';
+                return;
+            }
+
+            transactions.forEach(tx => {
+                const isSent = tx.fromUserId === currentUserId;
+                const otherUserId = isSent ? tx.toUserId : tx.fromUserId;
+
+                const transaction = db.transaction(['users'], 'readonly');
+                const usersStore = transaction.objectStore('users');
+                const userRequest = usersStore.get(otherUserId);
+
+                userRequest.onsuccess = () => {
+                    const otherUser = userRequest.result;
+                    if (otherUser ) {
+                        const amountClass = isSent ? 'text-danger' : 'text-success';
+                        const amountSign = isSent ? '-' : '+';
+                        const transactionCard = `
+                            <div class="transaction-card">
+                                <div class="transaction-left">
+                                    <div class="transaction-avatar">${otherUser.prenom.charAt(0)}${otherUser.nom.charAt(0)}</div>
+                                    <div class="transaction-info">
+                                        <h6>${otherUser.prenom} ${otherUser.nom}</h6>
+                                        <small>${new Date(tx.date).toLocaleDateString()}</small>
+                                    </div>
+                                </div>
+                                <div class="transaction-amount ${amountClass}">${amountSign}${tx.amount}F</div>
+                            </div>
+                        `;
+                        lastTransactions.innerHTML += transactionCard ;
+                    }
+                };
+            });
+        }
+
+        // --- EVENT LISTENERS --- //
+
+        /**
+         * Se déclenche au chargement de la page pour initialiser la page PIN et charger les données du tableau de bord
+         */
+        window.addEventListener('load', () => {
+            // Initialiser la page PIN
+            initPinPage();
+            
+            // Afficher la page PIN par défaut
+            hideAllPages();
+            document.getElementById('pinPage').style.display = 'block';
+            
+            // Charger les données du tableau de bord
+            loadDashboardData();
+
+            // Animer les barres du graphique
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.opacity = '0';
+                    bar.style.transform = 'scaleY(0)';
+                    bar.style.transformOrigin = 'bottom';
+                    bar.style.transition = 'all 0.5s ease';
+                    
+                    setTimeout(() => {
+                        bar.style.opacity = '1';
+                        bar.style.transform = 'scaleY(1)';
+                    }, 100);
+                }, index * 100);
+            });
+            
+            // Écouteur pour la recherche de contacts
+            document.getElementById('contactSearch').addEventListener('input', renderContacts);
+        });
+
+        /**
+         * Gère le clic sur le bouton "Transfer Payment".
+         */
+        document.getElementById('transfer-payment').addEventListener('click', () => {
+            const recipientphone = document.getElementById('recipient-phone').value;
+            const amount = document.getElementById('amount-to-send').textContent.replace(' CFA', '');
+
+            // Valider les entrées
+            if (!recipientphone || !amount || amount === '0.00') {
+                alert('Veuillez saisir un destinataire et un montant.');
+                return;
+            }
+
+            // Simulation de transfert réussi
+            alert(`Transfert de ${amount} CFA réussi vers ${recipientphone}!`);
+            document.getElementById('recipient-phone').value = '';
+            document.getElementById('amount-to-send').textContent = '0.00 CFA';
+            showDashboard();
+            loadDashboardData();
+        });
+
+        /**
+         * Gère le clic sur le bouton \"voir solde\".
+         */
+        document.getElementById('toggle-balance').addEventListener('click', () => {
+            const balanceEl = document.getElementById('balance-dashboard');
+            const btn = document.getElementById('toggle-balance');
+            if (balanceEl.textContent === '***') {
+                balanceEl.textContent = balanceEl.dataset.balance;
+                btn.textContent = 'masquer solde';
+            } else {
+                balanceEl.textContent = '***';
+                btn.textContent = 'voir solde';
+            }
+        });
+
+        /**
+         * Gère les clics sur les boutons du clavier.
+         */
+        const keypadBtns = document.querySelectorAll('.keypad-btn');
+        const amountToSend = document.getElementById('amount-to-send');
+        keypadBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const value = btn.textContent.trim();
+                let currentAmount = amountToSend.textContent.replace(' CFA', '');
+
+                if (btn.querySelector('i.fa-backspace')) {
+                    // Gérer la suppression
+                    currentAmount = currentAmount.slice(0, -1);
+                    if (currentAmount === '') {
+                        currentAmount = '0.00';
+                    }
+                } else if (value === '.') {
+                    // Gérer le point décimal
+                    if (!currentAmount.includes('.')) {
+                        currentAmount += '.';
+                    }
+                } else {
+                    // Gérer les chiffres
+                    if (currentAmount === '0.00') {
+                        currentAmount = value;
+                    } else {
+                        currentAmount += value;
+                        }
+                }
+
+                amountToSend.textContent = `${currentAmount} CFA`;
+            });
+        });
+
+    </script>
+</body>
+</html>

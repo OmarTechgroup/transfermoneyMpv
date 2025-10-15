@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - MoneyTransfer Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-money-bill-transfer"></i>
+            <span>MoneyTransfer</span>
+        </div>
+        <select class="language-selector">
+            <option>Français</option>
+            <option>English</option>
+
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="welcome-text">
+            <h1>Bienvenue</h1>
+            <p>Connectez-vous pour gérer vos transferts</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Adresse e-mail</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" class="form-control" placeholder="votre@email.com" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" class="form-control" placeholder="Votre mot de passe" required>
+                    <button type="button" class="password-toggle" id="togglePassword">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="options">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Se souvenir de moi</label>
+                </div>
+                <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+            </div>
+            
+            <button type="submit" class="btn-login">
+                <span class="btn-text">Se connecter</span>
+                <i class="fas fa-spinner loading"></i>
+            </button>
+            
+            <div class="divider">
+                <span>Ou continuer avec</span>
+            </div>
+            
+            <div class="social-login">
+                <button type="button" class="social-btn facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </button>
+                <button type="button" class="social-btn google">
+                    <i class="fab fa-google"></i>
+                </button>
+                <button type="button" class="social-btn apple">
+                    <i class="fab fa-apple"></i>
+                </button>
+            </div>
+            
+            <div class="signup-link">
+                Vous n'avez pas de compte ? <a href="/">Créer un compte</a>
+            </div>
+            
+            <div class="security-note">
+                <i class="fas fa-shield-alt"></i>
+                Vos informations sont sécurisées et cryptées
+            </div>
+        </form>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <i class="fas fa-shield-alt"></i>
+            <span>Sécurisé</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-bolt"></i>
+            <span>Rapide</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-globe"></i>
+            <span>Global</span>
+        </div>
+    </div>
+    <script src="../../indexedDB.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            const btnText = document.querySelector('.btn-text');
+            const loadingIcon = document.querySelector('.loading');
+            
+            // Basculer la visibilité du mot de passe
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+            });
+            
+            // Gestion de la soumission du formulaire
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                if(email && password) {
+                    btnText.textContent = 'Connexion...';
+                    loadingIcon.classList.add('active');
+                    loginForm.querySelector('button[type="submit"]').disabled = true;
+
+                    const transaction = db.transaction('users', 'readonly');
+                    const store = transaction.objectStore('users');
+                    const index = store.index('email');
+                    const request = index.get(email);
+
+                    request.onsuccess = () => {
+                        const user = request.result;
+                        if (user && user.password === password) {
+                            sessionStorage.setItem('userId', user.id);
+                            alert('Connexion réussie! Redirection vers votre tableau de bord...');
+                            window.location.href = '/home';
+                        } else {
+                            alert('Email ou mot de passe incorrect.');
+                            btnText.textContent = 'Se connecter';
+                            loadingIcon.classList.remove('active');
+                            loginForm.querySelector('button[type="submit"]').disabled = false;
+                        }
+                    };
+
+                    request.onerror = () => {
+                        alert('Une erreur est survenue lors de la connexion.');
+                        btnText.textContent = 'Se connecter';
+                        loadingIcon.classList.remove('active');
+                        loginForm.querySelector('button[type="submit"]').disabled = false;
+                    };
+                } else {
+                    alert('Veuillez remplir tous les champs');
+                }
+            });
+            
+            // Animation d'entrée des éléments
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'opacity 0.5s, transform 0.5s';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
